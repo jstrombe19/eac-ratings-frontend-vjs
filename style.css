@@ -1,0 +1,29 @@
+:root {
+    --eac_purple: #510c76;
+    --eac_gold: #fea400;
+}
+
+h1 {
+    text-align: center;
+    padding-top: 1%;
+    padding-bottom: 1%; 
+}
+
+body {
+    background-color: var(--eac_purple); /* EAC Purple */
+    color: var(--eac_gold); /* EAC Gold */
+
+}
+
+.form-input {
+    width: 150px;
+    padding-left: 1%;
+    padding-right: 1%;
+    margin-inline-start: 2%;
+}
+
+.form-submission {
+    width: 100px;
+    padding-left: 1%;
+    margin-inline-start: 2%;
+}
