@@ -4,17 +4,38 @@ console.log("Good morning, Vietnam!");
 document.addEventListener('DOMContentLoaded', () => {
     console.log("%cDOM Content Loaded and Parsed!", 'color: magenta');
 
+    const forms_list = {
+        'new-user': {
+            'username': 'text',
+            'password': 'text',
+            'level': 'text'
+        },
+        'new-rating': {
+            'filler1': 'text'
+        },
+        'login': {
+            'username': 'text',
+            'password': 'text'
+        }
+    };
+
     // select forms section for later use
     const formSection = document.getElementById('forms-section');
-    // declare all form types
-    const newUserForm = document.createElement('form');
-    const newRatingForm = document.createElement('form');
-    const loginForm = document.createElement('form');
-    
-    // append all form type sto forms section
-    formSection.appendChild(loginForm);
-    formSection.appendChild(newUserForm);
-    formSection.appendChild(newRatingForm);
+
+    let form_list_keys = Object.keys(forms_list);
+    form_list_keys.forEach(key => {
+        let new_element = document.createElement('form');
+        new_element.setAttribute('class', 'form');
+        new_element.setAttribute('id', `${key}-form`);
+        new_element.setAttribute('hidden', true);
+        formSection.appendChild(new_element);
+    })
+
+    // retrieve all form types
+    const newUserForm = document.getElementById('new-user-form');
+    const newRatingForm = document.getElementById('new-rating-form');
+    const loginForm = document.getElementById('login-form');
+
     
     // create login form
     let login_username = document.createElement('input');
