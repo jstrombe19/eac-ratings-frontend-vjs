@@ -87,6 +87,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case 'new-rating':
                 console.log('new-rating passed to create_form');
+                form_submit.innerText = 'add rating';
+                form_submit.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log("%cAdding Rating to Database!", 'color: #1BE7FF');
+                    
+                })
                 break;
             default:
                 console.error('Unknown form type passed into create_form');
@@ -97,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     create_form('login');
     create_form('new-user');
+    create_form('new-rating');
 
 
     // create new rating form
