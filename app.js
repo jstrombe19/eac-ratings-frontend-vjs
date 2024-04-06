@@ -1,5 +1,5 @@
 console.log("Good morning, Vietnam!");
-
+const storedToken = localStorage.getItem("jwt");
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log("%cDOM Content Loaded and Parsed!", 'color: magenta');
@@ -122,12 +122,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function user_is_active() {
         console.log('user_is_active was invoked');
-        // return true
+        if (localStorage.getItem("jwt")) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     function login_user() {
         const username = loginForm.getElementById('username');
         const password = loginForm.getElementById('password');
+        fetch("http://localhost:3000/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                // "Authorization": `Bearer ${/* token goes here */}`
+            },
+            body: JSON.stringify({
+                username: username.innerText,
+                password: password.innerText
+            }),
+        }).then(response => response.json())
+        .then(response => {
+            const token = response.token;
+            localStorage.setItem("jwt", token);
+        })
     }
 
 })
