@@ -11,7 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
             'level': 'text'
         },
         'new-rating': {
-            'filler1': 'text'
+            'id': 'hidden',
+            'user_id': 'hidden',
+            'department_id': 'hidden',
+            'title': 'text',
+            'rating': 'float'
         },
         'login': {
             'username': 'text',
