@@ -105,14 +105,9 @@ document.addEventListener('DOMContentLoaded', () => {
     create_form('new-user');
     create_form('new-rating');
 
-
-    // create new rating form
-    
-
-
-    // create new user form
     
     // create statistics viewer
+
 
     user_is_active()? display_articles() : display_login();
 
