@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         'login': {
             'username': 'text',
-            'password': 'text'
+            'password': 'password'
         }
     };
 
@@ -24,11 +24,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let form_list_keys = Object.keys(forms_list);
     form_list_keys.forEach(key => {
-        let new_element = document.createElement('form');
+        const new_element_parent = document.createElement('div');
+        new_element_parent.setAttribute('name', `${key}-div`);
+        new_element_parent.setAttribute('class', 'form-div');
+        const new_element = document.createElement('form');
         new_element.setAttribute('class', 'form');
         new_element.setAttribute('id', `${key}-form`);
         new_element.setAttribute('hidden', true);
-        formSection.appendChild(new_element);
+        new_element_parent.appendChild(new_element);
+        formSection.appendChild(new_element_parent);
     })
 
     // retrieve all form types

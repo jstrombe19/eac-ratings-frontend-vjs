@@ -15,11 +15,28 @@ body {
 
 }
 
+form {
+    padding-top: 1%;
+    padding-bottom: 1%;
+    /* visibility: hidden; */
+}
+
+.form-div {
+    margin: auto;
+    width: 40%;
+    background-color: lightgrey;
+    border-radius: 5px;
+}
+
 .form-input {
     width: 150px;
     padding-left: 1%;
     padding-right: 1%;
+    margin-top: 1.5%;
+    margin-bottom: 1.5%;
     margin-inline-start: 2%;
+    display: block;
+    border-radius: 2px;
 }
 
 .form-submission {
