@@ -36,16 +36,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const newRatingForm = document.getElementById('new-rating-form');
     const loginForm = document.getElementById('login-form');
 
-    
+    function append_child(form_name, new_child) {
+        switch(form_name) {
+            case 'login':
+                loginForm.appendChild(new_child);
+                break;
+            case 'new-rating':
+                newRatingForm.appendChild(new_child);
+                break;
+            case 'new-user':
+                newUserForm.appendChild(new_child);
+                break;
+            default:
+                console.error('Unknown form name passed to create_form function');
+        }
+    }
+
     function create_form(form_name) {
         const matched_form = forms_list[form_name];
+        console.log(form_name);
         const form_keys = Object.keys(matched_form);
         form_keys.forEach(key => {
             const form_input = document.createElement('input');
             form_input.setAttribute('type', matched_form[key]);
             form_input.setAttribute('class', 'form-input');
             form_input.setAttribute('placeholder', key);
-            loginForm.appendChild(form_input);
+            append_child(form_name, form_input);
         })
         const form_submit = document.createElement('button');
         form_submit.setAttribute('type', 'submit');
@@ -62,6 +78,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case 'new-user':
                 console.log('new-user passed to create_form');
+                form_submit.innerText = 'add user';
+                form_submit.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log("%cAdding User to Database!", 'color: #1BE7FF');
+                    
+                })
                 break;
             case 'new-rating':
                 console.log('new-rating passed to create_form');
@@ -70,10 +92,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Unknown form type passed into create_form');
                 break;
         }
-        loginForm.appendChild(form_submit);
+        append_child(form_name, form_submit);
     }
 
     create_form('login');
+    create_form('new-user');
 
 
     // create new rating form
