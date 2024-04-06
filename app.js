@@ -37,32 +37,43 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
 
     
-    // create login form
-    let login_username = document.createElement('input');
-    let login_password = document.createElement('input');
-    let login_submit = document.createElement('button');
-    
-    //login form entries
-    login_username.setAttribute('type', 'text');
-    login_username.setAttribute('class', 'form-input');
-    login_username.setAttribute('placeholder', 'username');
-    login_password.setAttribute('type', 'password');
-    login_password.setAttribute('class', 'form-input');
-    login_password.setAttribute('placeholder', 'password');
-    login_submit.setAttribute('type', 'submit');
-    login_submit.setAttribute('class', 'form-submission');
-    login_submit.innerText = 'login';
+    function create_form(form_name) {
+        const matched_form = forms_list[form_name];
+        const form_keys = Object.keys(matched_form);
+        form_keys.forEach(key => {
+            const form_input = document.createElement('input');
+            form_input.setAttribute('type', matched_form[key]);
+            form_input.setAttribute('class', 'form-input');
+            form_input.setAttribute('placeholder', key);
+            loginForm.appendChild(form_input);
+        })
+        const form_submit = document.createElement('button');
+        form_submit.setAttribute('type', 'submit');
+        form_submit.setAttribute('class', 'form-submission');
+        switch(form_name) {
+            case 'login':
+                console.log('login passed to create_form');
+                form_submit.innerText = 'login';
+                form_submit.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log("%cLogging User In!", 'color: #1BE7FF');
+                    
+                })
+                break;
+            case 'new-user':
+                console.log('new-user passed to create_form');
+                break;
+            case 'new-rating':
+                console.log('new-rating passed to create_form');
+                break;
+            default:
+                console.error('Unknown form type passed into create_form');
+                break;
+        }
+        loginForm.appendChild(form_submit);
+    }
 
-    login_submit.addEventListener('click', (e) => {
-        e.preventDefault();
-        console.log("%cLogging User In!", 'color: #1BE7FF');
-        
-    })
-
-    // append login form entries
-    loginForm.appendChild(login_username);
-    loginForm.appendChild(login_password);
-    loginForm.appendChild(login_submit);
+    create_form('login');
 
 
     // create new rating form
@@ -81,11 +92,17 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function display_login() {
         console.log('display_login was invoked');
+        loginForm.removeAttribute('hidden');
     };
 
     function user_is_active() {
         console.log('user_is_active was invoked');
-        return true
+        // return true
+    }
+
+    function login_user() {
+        const username = loginForm.getElementById('username');
+        const password = loginForm.getElementById('password');
     }
 
 })
