@@ -15,7 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
             'user_id': 'hidden',
             'department_id': 'hidden',
             'title': 'text',
-            'rating': 'float'
+            'context_rating': 'float',
+            'content_rating': 'float',
+            'genre_rating': 'float',
+            'sources_rating': 'float',
+            'control_rating': 'float'
         },
         'login': {
             'username': 'text',
@@ -114,7 +118,9 @@ document.addEventListener('DOMContentLoaded', () => {
     create_form('new-rating');
 
     
-    // create statistics viewer
+    // create statistics viewer (if authorized)
+
+    // create landing page for user (display all articles as links to lead to the review form)
 
 
     user_is_active()? display_articles() : display_login();
