@@ -27,6 +27,53 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    const rubric = {
+        'VOID': null,
+        'Capstone': 4,
+        'Milestones': 3,
+        'Benchmark': 1,
+        'Context': {
+            'heading': "Context of and Purpose for Writing",
+            'description': "Includes considerations of audience, purpose, and the circumstances surrounding the writing task(s).",
+            '4': "Demonstrates a thorough understanding of context, audience, and purpose that is responsive to the assigned task(s) and focuses all elements of the work.",
+            '3': "Demonstrates adequate consideration of context, audience, and purpose and a clear focus on the assigned task(s) (e.g., the task aligns with audience, purpose, and context).",
+            '2': "Demonstrates awareness of context, audience, purpose, and to the assigned tasks(s) (e.g., begins to show awareness of audience's perceptions and assumptions).",
+            '1': "Demonstrates minimal attention to context, audience, purpose, and to the assigned tasks(s) (e.g., expectation of instructor or self as audience)."
+        },
+        'Content': {
+            'heading': "Content Development",
+            'description': null,
+            '4': "Uses appropriate, relevant, and compelling content to illustrate mastery of the subject, conveying the writer's understanding, and shaping the whole work.",
+            '3': "Uses appropriate, relevant, and compelling content to explore ideas within the context of the discipline and shape the whole work.",
+            '2': "Uses appropriate and relevant content to develop and explore ideas through most of the work.",
+            '1': "Uses appropriate and relevant content to develop simple ideas in some parts of the work."
+        },
+        'Conventions': {
+            'heading': "Genre and Disciplinary Conventions",
+            'description': "Formal and informal rules inherent in the expectations for writing in particular forms and/or academic fields (please see glossary).",
+            '4': "Demonstrates detailed attention to and successful execution of a wide range of conventions particular to a specific discipline and/or writing task (s) including organization, content, presentation, formatting, and stylistic choices.",
+            '3': "Demonstrates consistent use of important conventions particular to a specific discipline and/or writing task(s), including organization, content, presentation, and stylistic choices.",
+            '2': "Follows expectations appropriate to a specific discipline and/or writing task(s) for basic organization, content, and presentation.",
+            '1': "Attempts to use a consistent system for basic organization and presentation."
+        },
+        'Sources': {
+            'heading': "Sources and Evidence",
+            'description': null,
+            '4': "Demonstrates skillful use of high- quality, credible, relevant sources to develop ideas that are appropriate for the discipline and genre of the writing.",
+            '3': "Demonstrates consistent use of credible, relevant sources to support ideas that are situated within the discipline and genre of the writing.",
+            '2': "Demonstrates an attempt to use credible and/or relevant sources to support ideas that are appropriate for the discipline and genre of the writing.",
+            '1': "Demonstrates an attempt to use sources to support ideas in the writing."
+        },
+        'Control': {
+            'heading': "Control of Syntax and Mechanics",
+            'description': null,
+            '4': "Uses graceful language that skillfully communicates meaning to readers with clarity and fluency, and is virtually error- free.",
+            '3': "Uses straightforward language that generally conveys meaning to readers. The language in the portfolio has few errors.",
+            '2': "Uses language that generally conveys meaning to readers with clarity, although writing may include some errors.",
+            '1': "Uses language that sometimes impedes meaning because of errors in usage."
+        }
+    };
+
     // select forms section for later use
     const formSection = document.getElementById('forms-section');
 
