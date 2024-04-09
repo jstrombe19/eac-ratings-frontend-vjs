@@ -119,7 +119,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const form_input = document.createElement('input');
             form_input.setAttribute('type', matched_form[key]);
             form_input.setAttribute('class', 'form-input');
+            form_input.setAttribute('value', '');
             form_input.setAttribute('placeholder', key);
+            form_input.setAttribute('id', key);
+            form_input.setAttribute('name', key);
+            // form_input.setAttribute('onChange', () => update_form_fields());
             append_child(form_name, form_input);
         })
         const form_submit = document.createElement('button');
@@ -132,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 form_submit.addEventListener('click', (e) => {
                     e.preventDefault();
                     console.log("%cLogging User In!", 'color: #1BE7FF');
-                    
+                    login_user();
                 })
                 break;
             case 'new-user':
@@ -167,10 +171,43 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // create statistics viewer (if authorized)
 
-    // create landing page for user (display all articles as links to lead to the review form)
+    // create landing page for user (display all articles as links to lead to the rating form)
+    let article_list_div = document.createElement('div');
+    article_list_div.setAttribute('class', 'list-div');
+    article_list_div.setAttribute('id', 'article-list');
+    // article_list_div.setAttribute('hidden', true);
+    formSection.appendChild(article_list_div);
+    
+    const articleList = document.getElementById('article-list');
+    // get all articles assigned to user
+    fetch('http://localhost:3000/user_articles', {
+        method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                // "Authorization": `Bearer ${/* token goes here */}`
+            },
+            body: JSON.stringify({
+                user_id: localStorage.getItem('user_id')
+            }),
+        }).then(response => response.json())
+        .then(response => {
+            
+        })
+    
 
 
-    user_is_active()? display_articles() : display_login();
+    // create new article rating
+
+
+
+    user_is_active()? check_for_active_article() : display_login();
+
+    function display_rating_form() {
+        const active_article = localStorage.getItem('active_article');
+        if (active_article) {
+
+        }
+    }
 
     function display_articles() {
         console.log('display_articles was invoked');
@@ -191,8 +228,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function login_user() {
-        const username = loginForm.getElementById('username');
-        const password = loginForm.getElementById('password');
+        // const username = document.getElementById('username');
+        const formData = new FormData(loginForm);
+        const username = formData.get('username');
+        const password = formData.get('password');
+        console.log(username);
         fetch("http://localhost:3000/login", {
             method: "POST",
             headers: {
@@ -200,8 +240,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // "Authorization": `Bearer ${/* token goes here */}`
             },
             body: JSON.stringify({
-                username: username.innerText,
-                password: password.innerText
+                username: username,
+                password: password
             }),
         }).then(response => response.json())
         .then(response => {

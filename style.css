@@ -16,6 +16,12 @@ body {
 
 }
 
+list-div {
+    display: block;
+    margin: auto;
+    width: 70%;
+}
+
 form {
     padding-top: 1%;
     padding-bottom: 1%;
