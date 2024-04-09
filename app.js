@@ -1,8 +1,8 @@
 console.log("Good morning, Vietnam!");
-const storedToken = localStorage.getItem("jwt");
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log("%cDOM Content Loaded and Parsed!", 'color: magenta');
+    sessionStorage.clear();
 
     const forms_list = {
         'new-user': {
@@ -168,6 +168,8 @@ document.addEventListener('DOMContentLoaded', () => {
     create_form('new-user');
     create_form('new-rating');
 
+    display_login();
+
     
     // create statistics viewer (if authorized)
 
@@ -180,30 +182,54 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const articleList = document.getElementById('article-list');
     // get all articles assigned to user
-    fetch('http://localhost:3000/user_articles', {
+    function get_user_articles() {
+        fetch('http://localhost:3000/user_articles', {
+            method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${storedToken}`,
+                    "user_id": `${userId}`
+                }
+            }).then(response => response.json())
+            .then(response => {
+                console.log(response);
+            })
+    }
+
+    function get_user_profile() {
+        const storedToken = sessionStorage.getItem("jwt");
+        const userId = sessionStorage.getItem("user_id");
+        fetch('http://localhost:3000/profile', {
         method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                // "Authorization": `Bearer ${/* token goes here */}`
-            },
-            body: JSON.stringify({
-                user_id: localStorage.getItem('user_id')
-            }),
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${storedToken}`,
+            "user_id": `${userId}`
+        }
         }).then(response => response.json())
         .then(response => {
-            
+            console.log(response);
         })
-    
+
+    }
 
 
     // create new article rating
 
 
 
-    user_is_active()? check_for_active_article() : display_login();
+    // user_is_active()? check_for_active_article() : display_login();
+
+    // function update_stored_token() {
+    //     storedToken = sessionStorage.get("jwt");
+    // }
+
+    // function update_user_id() {
+    //     userId = sessionStorage.get("user_id");
+    // }
 
     function display_rating_form() {
-        const active_article = localStorage.getItem('active_article');
+        const active_article = sessionStorage.getItem('active_article');
         if (active_article) {
 
         }
@@ -218,9 +244,13 @@ document.addEventListener('DOMContentLoaded', () => {
         loginForm.removeAttribute('hidden');
     };
 
+    function hide_login_form() {
+        loginForm.setAttribute('hidden', true);
+    }
+
     function user_is_active() {
         console.log('user_is_active was invoked');
-        if (localStorage.getItem("jwt")) {
+        if (sessionStorage.getItem("jwt")) {
             return true;
         } else {
             return false;
@@ -232,7 +262,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const formData = new FormData(loginForm);
         const username = formData.get('username');
         const password = formData.get('password');
-        console.log(username);
         fetch("http://localhost:3000/login", {
             method: "POST",
             headers: {
@@ -246,8 +275,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }).then(response => response.json())
         .then(response => {
             const token = response.token;
-            localStorage.setItem("jwt", token);
+            sessionStorage.setItem("jwt", token);
+        })
+        .then(response => {
+            hide_login_form();
+            get_user_profile();
         })
     }
+
+
 
 })
