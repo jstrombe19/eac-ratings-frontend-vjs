@@ -208,7 +208,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         }).then(response => response.json())
         .then(response => {
-            console.log(response);
+            // console.log(response['include']);
+            display_articles(response['include']);
         })
 
     }
@@ -235,8 +236,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function display_articles() {
+    function is_article_review_complete(article) {
+        if(article['content_rating'] && article['context_rating'] && article['control_rating'] && article['sources_rating']) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function display_articles(articles) {
         console.log('display_articles was invoked');
+        articles.forEach(article => {
+            // create list entry using title
+            // create list entry for review status
+            const review_status = is_article_review_complete(article);
+            console.log(review_status);
+        })
     };
     
     function display_login() {
