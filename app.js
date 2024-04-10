@@ -75,8 +75,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // select forms section for later use
+    // select static HTML elements for later use
     const formSection = document.getElementById('forms-section');
+    const tableSection = document.getElementById('table-section');
 
     let form_list_keys = Object.keys(forms_list);
     form_list_keys.forEach(key => {
@@ -179,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let article_list_div = document.createElement('div');
     article_list_div.setAttribute('class', 'list-div');
     article_list_div.setAttribute('id', 'article-list');
-    formSection.appendChild(article_list_div);
+    tableSection.appendChild(article_list_div);
     
     const articleList = document.getElementById('article-list');
 
