@@ -17,9 +17,33 @@ body {
 }
 
 list-div {
-    display: block;
+    display: flex;
+    flex-direction: column;
     margin: auto;
     width: 70%;
+}
+
+td {
+    text-align: center;
+    /* margin-inline-start: 1%; */
+}
+
+th {
+    display: table-row;
+    /* text-align: center; */
+    /* margin-inline-start: 1%; */
+}
+
+table {
+    padding-top: 1%;
+    padding-bottom: 1%;
+}
+
+.table {
+    margin: auto;
+    width: 500px;
+    /* background-color: lightgrey; */
+    /* border-radius: 5px; */
 }
 
 form {

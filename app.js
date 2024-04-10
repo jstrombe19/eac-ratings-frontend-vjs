@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const rubric = {
         'VOID': null,
         'Capstone': 4,
-        'Milestones': 3,
+        'Milestones': 3.2,
         'Benchmark': 1,
         'Context': {
             'heading': "Context of and Purpose for Writing",
@@ -178,7 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let article_list_div = document.createElement('div');
     article_list_div.setAttribute('class', 'list-div');
     article_list_div.setAttribute('id', 'article-list');
-    // article_list_div.setAttribute('hidden', true);
     formSection.appendChild(article_list_div);
     
     const articleList = document.getElementById('article-list');
@@ -203,8 +202,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // create new article rating
-
-
 
     // user_is_active()? check_for_active_article() : display_login();
 
@@ -235,19 +232,97 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    const article_list_tbl = document.createElement('table');
+    article_list_tbl.setAttribute('id', 'article-list-table');
+    article_list_tbl.setAttribute('class', 'table');
+    article_list_tbl.setAttribute('name', 'article-list-table');
+    article_list_tbl.setAttribute('hidden', true);
+    articleList.appendChild(article_list_tbl);
+
+    const article_tr_headers = document.createElement('th');
+    article_tr_headers.setAttribute('class', 'article-tr-header');
+    article_tr_headers.setAttribute('id', 'article-tr-header');
+    
+    const article_td_title_header = document.createElement('td');
+    article_td_title_header.setAttribute('name', 'article-title-header');
+    article_td_title_header.setAttribute('id', 'article-title-header');
+
+    const article_td_header_tn = document.createTextNode('Article Title');
+    article_td_title_header.appendChild(article_td_header_tn);
+    article_tr_headers.appendChild(article_td_title_header);
+
+    const article_td_review_status_header = document.createElement('td');
+    article_td_review_status_header.setAttribute('name', 'article-review-status-header');
+    article_td_review_status_header.setAttribute('id', `article-review-status-header`);
+
+    const article_td_review_header_tn = document.createTextNode('Article Review Status');
+    article_td_review_status_header.appendChild(article_td_review_header_tn);
+    article_tr_headers.appendChild(article_td_review_status_header);
+
+    article_list_tbl.appendChild(article_tr_headers);
+
     function display_articles(articles) {
+        /*
+        const matched_form = forms_list[form_name];
+        console.log(form_name);
+        const form_keys = Object.keys(matched_form);
+        form_keys.forEach(key => {
+            const form_input = document.createElement('input');
+            form_input.setAttribute('type', matched_form[key]);
+            form_input.setAttribute('class', 'form-input');
+            form_input.setAttribute('value', '');
+            form_input.setAttribute('placeholder', key);
+            form_input.setAttribute('id', key);
+            form_input.setAttribute('name', key);
+            // form_input.setAttribute('onChange', () => update_form_fields());
+            append_child(form_name, form_input);
+        })
+        const form_submit = document.createElement('button');
+        form_submit.setAttribute('type', 'submit');
+        form_submit.setAttribute('class', 'form-submission');
+        switch(form_name) {
+            case 'login':
+                console.log('login passed to create_form');
+                form_submit.innerText = 'login';
+                form_submit.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log("%cLogging User In!", 'color: #1BE7FF');
+                    login_user();
+                })
+                break;
+        */
+        article_list_tbl.removeAttribute('hidden');
         console.log('display_articles was invoked');
         articles.forEach(article => {
             console.log(article);
             // create table entry using title
-            // create table entry for review status
-            const review_status = is_article_review_complete(article);
-            console.log(review_status);
+            const article_tr = document.createElement('tr');
+            article_tr.setAttribute('class', 'article-tr');
+            article_tr.setAttribute('id', `tr-${article.id}`);
+            
+            const article_td_title = document.createElement('td');
+            article_td_title.setAttribute('name', 'article-title');
+            article_td_title.setAttribute('id', `title-td-${article.id}`);
+
+            const article_td_tn = document.createTextNode(article.title);
+            article_td_title.appendChild(article_td_tn);
+            article_tr.appendChild(article_td_title);
+
+            const article_td_review_status = document.createElement('td');
+            article_td_review_status.setAttribute('name', 'article-review-status');
+            article_td_review_status.setAttribute('id', `status-td-${article.id}`);
+
+            const article_td_review_tn = document.createTextNode(is_article_review_complete(article));
+            article_td_review_status.appendChild(article_td_review_tn);
+            article_tr.appendChild(article_td_review_status);
+
+            article_list_tbl.appendChild(article_tr);
         })
     };
 
     function hide_articles() {
         console.log('hide_articles was invoked');
+        article_list_tbl.setAttribute('hidden', true);
     }
     
     function display_login() {
