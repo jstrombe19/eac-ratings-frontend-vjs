@@ -1,3 +1,4 @@
+
 console.log("Good morning, Vietnam!");
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -181,20 +182,6 @@ document.addEventListener('DOMContentLoaded', () => {
     formSection.appendChild(article_list_div);
     
     const articleList = document.getElementById('article-list');
-    // get all articles assigned to user
-    function get_user_articles() {
-        fetch('http://localhost:3000/user_articles', {
-            method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${storedToken}`,
-                    "user_id": `${userId}`
-                }
-            }).then(response => response.json())
-            .then(response => {
-                console.log(response);
-            })
-    }
 
     function get_user_profile() {
         const storedToken = sessionStorage.getItem("jwt");
@@ -229,11 +216,15 @@ document.addEventListener('DOMContentLoaded', () => {
     //     userId = sessionStorage.get("user_id");
     // }
 
-    function display_rating_form() {
+    function display_rating_form(article) {
         const active_article = sessionStorage.getItem('active_article');
         if (active_article) {
 
         }
+    }
+
+    function hide_rating_form() {
+
     }
 
     function is_article_review_complete(article) {
@@ -247,12 +238,17 @@ document.addEventListener('DOMContentLoaded', () => {
     function display_articles(articles) {
         console.log('display_articles was invoked');
         articles.forEach(article => {
-            // create list entry using title
-            // create list entry for review status
+            console.log(article);
+            // create table entry using title
+            // create table entry for review status
             const review_status = is_article_review_complete(article);
             console.log(review_status);
         })
     };
+
+    function hide_articles() {
+        console.log('hide_articles was invoked');
+    }
     
     function display_login() {
         console.log('display_login was invoked');
