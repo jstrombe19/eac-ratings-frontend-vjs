@@ -95,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const newUserForm = document.getElementById('new-user-form');
     const newRatingForm = document.getElementById('new-rating-form');
     const loginForm = document.getElementById('login-form');
+    // todo: add new article form
 
     function append_child(form_name, new_child) {
         switch(form_name) {
@@ -149,15 +150,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                 })
                 break;
-            case 'new-rating':
-                console.log('new-rating passed to create_form');
-                form_submit.innerText = 'add rating';
-                form_submit.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    console.log("%cAdding Rating to Database!", 'color: #1BE7FF');
+            // case 'new-rating':
+            //     console.log('new-rating passed to create_form');
+            //     form_submit.innerText = 'add rating';
+            //     form_submit.addEventListener('click', (e) => {
+            //         e.preventDefault();
+            //         console.log("%cAdding Rating to Database!", 'color: #1BE7FF');
                     
-                })
-                break;
+            //     })
+            //     break;
             default:
                 console.error('Unknown form type passed into create_form');
                 break;
@@ -167,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     create_form('login');
     create_form('new-user');
-    create_form('new-rating');
+    // create_form('new-rating');
 
     display_login();
 
@@ -213,11 +214,48 @@ document.addEventListener('DOMContentLoaded', () => {
     //     userId = sessionStorage.get("user_id");
     // }
 
-    function display_rating_form(article) {
-        const active_article = sessionStorage.getItem('active_article');
-        if (active_article) {
 
+    const rubric_keys = Object.keys(rubric);
+    function display_rating_form(article_id) {
+        const active_article = JSON.parse(sessionStorage.getItem(article_id));
+        hide_articles();
+        newRatingForm.removeAttribute('hidden');
+        const rating_title = document.createElement('header');
+        rating_title.innerHTML = `EAC Written Communication Rubric for ${active_article.title}`;
+        // rating_title.setAttribute('class', '')
+        newRatingForm.appendChild(rating_title);
+        for(let i = 4; i<9; i++) {
+            const rubric_row = document.createElement('tr');
+            rubric_row.setAttribute('class', 'rubric-tr');
+            rubric_row.setAttribute('id', `rubric-tr-${rubric_keys[i]}`);
+
+            // const rubric_row_keys = Object.keys(rubric[rubric_keys[i]]);
+            const rubric_row_keys = ['heading', 'description', '4', '3', '2', '1'];
+            rubric_row_keys.forEach(row_key => {
+                // console.log(row_key);
+                const rubric_row_td = document.createElement('td');
+                rubric_row_td.setAttribute('name', `rubric-row-td-${row_key}`);
+                rubric_row_td.setAttribute('id', `${rubric_keys[i]-row_key}`);
+                rubric_row_td.innerHTML = rubric[rubric_keys[i]][row_key];
+                rubric_row.appendChild(rubric_row_td);   
+            })
+
+            const rubric_row_form_field = document.createElement('td');
+            rubric_row_form_field.setAttribute('class', 'rubric-row-form-field');
+            rubric_row_form_field.setAttribute('id', `${rubric_keys[i]}-${rubric_row_keys[i]}-form-field`);
+            const rubric_row_form_field_entry = document.createElement('input');
+            rubric_row_form_field_entry.setAttribute('type', 'text');
+            rubric_row_form_field_entry.setAttribute('class', 'form-input');
+            rubric_row_form_field_entry.setAttribute('value', '');
+            rubric_row_form_field_entry.setAttribute('placeholder', '');
+            rubric_row_form_field_entry.setAttribute('id', `${rubric_keys[i]}-${rubric_row_keys[i]}`);
+            rubric_row_form_field_entry.setAttribute('name', `${rubric_keys[i]}-${rubric_row_keys[i]}`);
+            rubric_row_form_field.appendChild(rubric_row_form_field_entry);
+            rubric_row.appendChild(rubric_row_form_field);
+
+            newRatingForm.appendChild(rubric_row);
         }
+        // console.log(rubric_keys);
     }
 
     function hide_rating_form() {
@@ -294,7 +332,8 @@ document.addEventListener('DOMContentLoaded', () => {
         article_list_tbl.removeAttribute('hidden');
         console.log('display_articles was invoked');
         articles.forEach(article => {
-            console.log(article);
+            // console.log(article);
+            sessionStorage.setItem(`${article.id}`, JSON.stringify(article));
             // create table entry using title
             const article_tr = document.createElement('tr');
             article_tr.setAttribute('class', 'article-tr');
@@ -302,8 +341,13 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const article_td_title = document.createElement('td');
             article_td_title.setAttribute('name', 'article-title');
-            article_td_title.setAttribute('id', `title-td-${article.id}`);
+            article_td_title.setAttribute('id', `${article.id}`);
             article_td_title.style.cursor = 'pointer';
+            article_td_title.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log(e.target.id);
+                display_rating_form(e.target.id);
+            })
 
             const article_td_tn = document.createTextNode(article.title);
             article_td_title.appendChild(article_td_tn);
