@@ -303,6 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const article_td_title = document.createElement('td');
             article_td_title.setAttribute('name', 'article-title');
             article_td_title.setAttribute('id', `title-td-${article.id}`);
+            article_td_title.style.cursor = 'pointer';
 
             const article_td_tn = document.createTextNode(article.title);
             article_td_title.appendChild(article_td_tn);
