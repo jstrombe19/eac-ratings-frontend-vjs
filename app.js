@@ -129,13 +129,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // form_input.setAttribute('onChange', () => update_form_fields());
             append_child(form_name, form_input);
         })
-        const form_submit = document.createElement('button');
+        const form_submit_div = document.createElement('div');
+        form_submit_div.setAttribute('class', 'form-group');
+        const form_submit = document.createElement('input');
         form_submit.setAttribute('type', 'submit');
-        form_submit.setAttribute('class', 'form-submission');
         switch(form_name) {
             case 'login':
                 console.log('login passed to create_form');
-                form_submit.innerText = 'login';
+                form_submit.value = 'Login';
                 form_submit.addEventListener('click', (e) => {
                     e.preventDefault();
                     console.log("%cLogging User In!", 'color: #1BE7FF');
@@ -148,6 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 form_submit.addEventListener('click', (e) => {
                     e.preventDefault();
                     console.log("%cAdding User to Database!", 'color: #1BE7FF');
+                    add_user();
                     
                 })
                 break;
@@ -164,6 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Unknown form type passed into create_form');
                 break;
         }
+        form_submit.appendChild(form_submit_div);
         append_child(form_name, form_submit);
     }
 
@@ -173,6 +176,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     display_login();
 
+
+    function add_user() {
+        console.log('new user form is going to pop up here');
+    }
     
     // create statistics viewer (if authorized)
 
