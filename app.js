@@ -98,6 +98,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
     // todo: add new article form
 
+    // retrieve nav buttons
+    const homeButton = document.getElementById('home-button');
+    const articlesButton = document.getElementById('articles-button');
+    const addUserButton = document.getElementById('add-user-button');
+
+    homeButton.onclick = function() {handleHomeClick()};
+    articlesButton.onclick = function() {handleArticlesClick()};
+    addUserButton.onclick = function() {handleAddUserClick()};
+
+    function handleHomeClick() {
+        console.log('home button clicked');
+    }
+
+    function handleArticlesClick() {
+        console.log('articles button clicked');
+        if (user_is_active()) {
+            hide_rating_form();
+            hide_login_form();
+            const sessionStorageKeys = Object.keys(sessionStorage);
+            console.log(sessionStorage[sessionStorageKeys[0]]);
+            // display_articles();
+        } else {
+            console.error('No user logged in');
+        }
+    }
+
+    function handleAddUserClick() {
+        console.log('add user button clicked');
+    }
+
     function append_child(form_name, new_child) {
         switch(form_name) {
             case 'login':
@@ -121,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
         form_keys.forEach(key => {
             const form_input = document.createElement('input');
             form_input.setAttribute('type', matched_form[key]);
-            form_input.setAttribute('class', 'form-input');
+            form_input.setAttribute('class', 'form-group');
             form_input.setAttribute('value', '');
             form_input.setAttribute('placeholder', key);
             form_input.setAttribute('id', key);
@@ -204,7 +234,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }).then(response => response.json())
         .then(response => {
             // console.log(response['include']);
-            display_articles(response['include']);
+            store_user_articles_to_session(response['include']);
+        })
+        .then(response => {
+            console.log('store_user_articles_to_session response: ', response);
+            display_articles(retrieve_articles_from_session());
         })
 
     }
@@ -243,7 +277,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // console.log(row_key);
                 const rubric_row_td = document.createElement('td');
                 rubric_row_td.setAttribute('name', `rubric-row-td-${row_key}`);
-                rubric_row_td.setAttribute('id', `${rubric_keys[i]-row_key}`);
+                rubric_row_td.setAttribute('class', 'rubric-row-td');
+                rubric_row_td.setAttribute('id', `${rubric_keys[i]}-${row_key}`);
                 rubric_row_td.innerHTML = rubric[rubric_keys[i]][row_key];
                 rubric_row.appendChild(rubric_row_td);   
             })
@@ -253,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
             rubric_row_form_field.setAttribute('id', `${rubric_keys[i]}-${rubric_row_keys[i]}-form-field`);
             const rubric_row_form_field_entry = document.createElement('input');
             rubric_row_form_field_entry.setAttribute('type', 'text');
-            rubric_row_form_field_entry.setAttribute('class', 'form-input');
+            rubric_row_form_field_entry.setAttribute('class', 'form-group');
             rubric_row_form_field_entry.setAttribute('value', '');
             rubric_row_form_field_entry.setAttribute('placeholder', '');
             rubric_row_form_field_entry.setAttribute('id', `${rubric_keys[i]}-${rubric_row_keys[i]}`);
@@ -307,6 +342,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
     article_list_tbl.appendChild(article_tr_headers);
 
+
+    function store_user_articles_to_session(articles) {
+        articles.forEach(article => {
+            // console.log(article);
+            sessionStorage.setItem(`${article.id}`, JSON.stringify(article));
+        });
+        return "User articles stored to session storage";
+    }
+
+    function retrieve_articles_from_session() {
+        let sessionStorageKeys = Object.keys(sessionStorage);
+        sessionStorageKeys = sessionStorageKeys.filter(entry => entry !== 'jwt');
+        let numericStorageKeys = new Int16Array(sessionStorageKeys.length);
+        console.log('sessionStorageKeys post-filter: ', sessionStorageKeys);
+        for (let [index, key] of sessionStorageKeys.entries()) {
+            if (index < sessionStorageKeys.length) {
+                numericStorageKeys.fill(parseInt(key), index, index+1);
+            } else {
+                numericStorageKeys.fill(parseInt(key), index);
+            }
+            // numericStorageKeys.set(parseInt(key), index);
+            // console.log(index, key, parseInt(key));
+            // console.log('numericStorageKeys[<index>]: ', numericStorageKeys[index]);
+        }
+        // sessionStorageKeys.forEach(entry, index => {
+        //     numericStorageKeys.set(parseInt(entry), index);
+        // });
+        numericStorageKeys = numericStorageKeys.sort();
+        // console.log('numericStorageKeys post-sort: ', numericStorageKeys);
+        let articles = new Array();
+        numericStorageKeys.forEach(key => {
+            articles.push(JSON.parse(sessionStorage.getItem(key.toString())));
+        })
+        console.log('articles: ', articles);
+        return articles;
+    }
+
     function display_articles(articles) {
         /*
         const matched_form = forms_list[form_name];
@@ -340,8 +412,8 @@ document.addEventListener('DOMContentLoaded', () => {
         article_list_tbl.removeAttribute('hidden');
         console.log('display_articles was invoked');
         articles.forEach(article => {
-            // console.log(article);
-            sessionStorage.setItem(`${article.id}`, JSON.stringify(article));
+            // // console.log(article);
+            // sessionStorage.setItem(`${article.id}`, JSON.stringify(article));
             // create table entry using title
             const article_tr = document.createElement('tr');
             article_tr.setAttribute('class', 'article-tr');
