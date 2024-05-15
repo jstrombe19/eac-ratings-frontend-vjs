@@ -116,9 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (user_is_active()) {
             hide_rating_form();
             hide_login_form();
-            const sessionStorageKeys = Object.keys(sessionStorage);
-            console.log(sessionStorage[sessionStorageKeys[0]]);
-            // display_articles();
+            redisplay_articles();
         } else {
             console.error('No user logged in');
         }
@@ -302,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function hide_rating_form() {
-
+        newRatingForm.setAttribute('hidden', true);
     }
 
     function is_article_review_complete(article) {
@@ -377,6 +375,10 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         console.log('articles: ', articles);
         return articles;
+    }
+
+    function redisplay_articles() {
+        article_list_tbl.removeAttribute('hidden');
     }
 
     function display_articles(articles) {
