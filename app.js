@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleArticlesClick() {
-        console.log('articles button clicked');
+        // console.log('articles button clicked');
         if (user_is_active()) {
             hide_rating_form();
             hide_login_form();
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function create_form(form_name) {
         const matched_form = forms_list[form_name];
-        console.log(form_name);
+        // console.log(form_name);
         const form_keys = Object.keys(matched_form);
         form_keys.forEach(key => {
             const form_input = document.createElement('input');
@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
         form_submit.setAttribute('type', 'submit');
         switch(form_name) {
             case 'login':
-                console.log('login passed to create_form');
+                // console.log('login passed to create_form');
                 form_submit.value = 'Login';
                 form_submit.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 break;
             case 'new-user':
-                console.log('new-user passed to create_form');
+                // console.log('new-user passed to create_form');
                 form_submit.innerText = 'add user';
                 form_submit.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -259,6 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function display_rating_form(article_id) {
         const active_article = JSON.parse(sessionStorage.getItem(article_id));
         hide_articles();
+        formSection.removeAttribute('hidden');
         newRatingForm.removeAttribute('hidden');
         const rating_title = document.createElement('header');
         rating_title.innerHTML = `EAC Written Communication Rubric for ${active_article.title}`;
@@ -300,7 +301,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function hide_rating_form() {
+        newRatingForm.innerHTML = "";
         newRatingForm.setAttribute('hidden', true);
+        formSection.setAttribute('hidden', true);
     }
 
     function is_article_review_complete(article) {
@@ -378,6 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function redisplay_articles() {
+        tableSection.removeAttribute('hidden');
         article_list_tbl.removeAttribute('hidden');
     }
 
@@ -411,6 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 break;
         */
+        tableSection.removeAttribute('hidden');
         article_list_tbl.removeAttribute('hidden');
         console.log('display_articles was invoked');
         articles.forEach(article => {
@@ -448,21 +453,23 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function hide_articles() {
-        console.log('hide_articles was invoked');
+        // console.log('hide_articles was invoked');
         article_list_tbl.setAttribute('hidden', true);
     }
     
     function display_login() {
-        console.log('display_login was invoked');
+        // console.log('display_login was invoked');
         loginForm.removeAttribute('hidden');
+        formSection.removeAttribute('hidden');
     };
 
     function hide_login_form() {
         loginForm.setAttribute('hidden', true);
+        formSection.setAttribute('hidden', true);
     }
 
     function user_is_active() {
-        console.log('user_is_active was invoked');
+        // console.log('user_is_active was invoked');
         if (sessionStorage.getItem("jwt")) {
             return true;
         } else {
