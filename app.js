@@ -290,15 +290,61 @@ document.addEventListener('DOMContentLoaded', () => {
             rubric_row_form_field_entry.setAttribute('class', 'form-group');
             rubric_row_form_field_entry.setAttribute('value', '');
             rubric_row_form_field_entry.setAttribute('placeholder', '');
-            rubric_row_form_field_entry.setAttribute('id', `${rubric_keys[i]}-${rubric_row_keys[i]}`);
-            rubric_row_form_field_entry.setAttribute('name', `${rubric_keys[i]}-${rubric_row_keys[i]}`);
+            rubric_row_form_field_entry.setAttribute('id', `${rubric_keys[i]}-rating`);
+            rubric_row_form_field_entry.setAttribute('name', `${rubric_keys[i]}-rating`);
             rubric_row_form_field.appendChild(rubric_row_form_field_entry);
             rubric_row.appendChild(rubric_row_form_field);
 
             newRatingForm.appendChild(rubric_row);
         }
-        // console.log(rubric_keys);
+
+        const form_submit_div = document.createElement('div');
+        form_submit_div.setAttribute('class', 'form-group');
+        const form_submit = document.createElement('input');
+        form_submit.setAttribute('type', 'submit');
+        // console.log('login passed to create_form');
+        form_submit.value = 'Submit Review';
+        form_submit.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log("%cSubmitting article review!", 'color: #1BE7FF');
+            submit_article_review(newRatingForm, article_id);
+        })
+        form_submit_div.appendChild(form_submit);
+        newRatingForm.appendChild(form_submit_div);
     }
+
+    function submit_article_review(newRatingForm, article_id) {
+        // const username = document.getElementById('username');
+        console.log('newRatingForm: ', newRatingForm);
+        console.log('article_id: ', article_id);
+        const formData = new FormData(newRatingForm);
+        const contextRating = formData.get('Context-rating');
+        const contentRating = formData.get('Content-rating');
+        const conventionsRating = formData.get('Conventions-rating');
+        const sourcesRating = formData.get('Sources-rating');
+        const controlRating = formData.get('Control-rating');
+        fetch(`http://localhost:3000/articles/${article_id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                // "Authorization": `Bearer ${/* token goes here */}`
+            },
+            body: JSON.stringify({
+                context_rating: contextRating,
+                content_rating: contentRating,
+                genre_rating: conventionsRating,
+                sources_rating: sourcesRating,
+                control_rating: controlRating,
+                rating: [contextRating, contentRating, conventionsRating, sourcesRating, controlRating]
+            }),
+        }).then(response => response.json())
+        .then(response => {
+            console.log(response);
+            hide_rating_form();
+            redisplay_articles();
+        })
+    }
+
 
     function hide_rating_form() {
         newRatingForm.innerHTML = "";
