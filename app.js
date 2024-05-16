@@ -563,8 +563,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function add_user() {
-
+    function handle_add_user() {
+        fetch_all_users();
     }
 
     function add_article() {
@@ -584,6 +584,22 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(response.length);
             // clear the user articles before displaying all articles
             store_all_articles_to_local(response);
+        })
+    }
+
+    function fetch_all_users() {
+        const storedToken = sessionStorage.getItem("jwt");
+        fetch('http://localhost:3000/permissible', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${storedToken}`,
+        }
+        }).then(response => response.json())
+        .then(response => {
+            console.log(response);
+            // clear the user articles before displaying all articles
+            // store_all_articles_to_local(response);
         })
     }
 
@@ -674,7 +690,7 @@ document.addEventListener('DOMContentLoaded', () => {
         addUserA.addEventListener('click', e => {
             e.preventDefault();
             console.log('Add User was clicked');
-            add_user();
+            handle_add_user();
         })
         
         addArticleA.setAttribute('id', 'add-article');
