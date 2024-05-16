@@ -78,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // select static HTML elements for later use
     const formSection = document.getElementById('forms-section');
     const tableSection = document.getElementById('table-section');
+    const navContainer = document.getElementById('nav-container');
 
     let form_list_keys = Object.keys(forms_list);
     form_list_keys.forEach(key => {
@@ -99,17 +100,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // todo: add new article form
 
     // retrieve nav buttons
-    const homeButton = document.getElementById('home-button');
     const articlesButton = document.getElementById('articles-button');
-    const addUserButton = document.getElementById('add-user-button');
+    const navUl = document.getElementById('nav-ul');
 
-    homeButton.onclick = function() {handleHomeClick()};
     articlesButton.onclick = function() {handleArticlesClick()};
-    addUserButton.onclick = function() {handleAddUserClick()};
-
-    function handleHomeClick() {
-        console.log('home button clicked');
-    }
+    // addUserButton.onclick = function() {handleAddUserClick()};
 
     function handleArticlesClick() {
         // console.log('articles button clicked');
@@ -221,13 +216,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function get_user_profile() {
         const storedToken = sessionStorage.getItem("jwt");
-        const userId = sessionStorage.getItem("user_id");
         fetch('http://localhost:3000/profile', {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${storedToken}`,
-            "user_id": `${userId}`
+            // "user_id": `${userId}`
         }
         }).then(response => response.json())
         .then(response => {
@@ -315,8 +309,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function submit_article_review(newRatingForm, article_id) {
         // const username = document.getElementById('username');
-        console.log('newRatingForm: ', newRatingForm);
-        console.log('article_id: ', article_id);
+        // console.log('newRatingForm: ', newRatingForm);
+        // console.log('article_id: ', article_id);
         const formData = new FormData(newRatingForm);
         const contextRating = formData.get('Context-rating');
         const contentRating = formData.get('Content-rating');
@@ -361,34 +355,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const article_list_tbl = document.createElement('table');
-    article_list_tbl.setAttribute('id', 'article-list-table');
-    article_list_tbl.setAttribute('class', 'table');
-    article_list_tbl.setAttribute('name', 'article-list-table');
-    article_list_tbl.setAttribute('hidden', true);
-    articleList.appendChild(article_list_tbl);
-
     const article_tr_headers = document.createElement('th');
-    article_tr_headers.setAttribute('class', 'article-tr-header');
-    article_tr_headers.setAttribute('id', 'article-tr-header');
-    
     const article_td_title_header = document.createElement('td');
-    article_td_title_header.setAttribute('name', 'article-title-header');
-    article_td_title_header.setAttribute('id', 'article-title-header');
-
     const article_td_header_tn = document.createTextNode('Article Title');
-    article_td_title_header.appendChild(article_td_header_tn);
-    article_tr_headers.appendChild(article_td_title_header);
-
     const article_td_review_status_header = document.createElement('td');
-    article_td_review_status_header.setAttribute('name', 'article-review-status-header');
-    article_td_review_status_header.setAttribute('id', `article-review-status-header`);
-
     const article_td_review_header_tn = document.createTextNode('Article Review Status');
-    article_td_review_status_header.appendChild(article_td_review_header_tn);
-    article_tr_headers.appendChild(article_td_review_status_header);
+    
+    function configure_article_table() {
+        article_list_tbl.setAttribute('id', 'article-list-table');
+        article_list_tbl.setAttribute('class', 'table');
+        article_list_tbl.setAttribute('name', 'article-list-table');
+        article_list_tbl.setAttribute('hidden', true);
+        articleList.appendChild(article_list_tbl);
+    
+        article_tr_headers.setAttribute('class', 'article-tr-header');
+        article_tr_headers.setAttribute('id', 'article-tr-header');
+        
+        article_td_title_header.setAttribute('name', 'article-title-header');
+        article_td_title_header.setAttribute('id', 'article-title-header');
+    
+        article_td_title_header.appendChild(article_td_header_tn);
+        article_tr_headers.appendChild(article_td_title_header);
+    
+        article_td_review_status_header.setAttribute('name', 'article-review-status-header');
+        article_td_review_status_header.setAttribute('id', `article-review-status-header`);
+    
+        article_td_review_status_header.appendChild(article_td_review_header_tn);
+        article_tr_headers.appendChild(article_td_review_status_header);
+    
+        article_list_tbl.appendChild(article_tr_headers);
+    }
 
-    article_list_tbl.appendChild(article_tr_headers);
-
+    configure_article_table();
 
     function store_user_articles_to_session(articles) {
         articles.forEach(article => {
@@ -398,9 +396,17 @@ document.addEventListener('DOMContentLoaded', () => {
         return "User articles stored to session storage";
     }
 
+    function store_all_articles_to_local(articles) {
+        articles.forEach(article => {
+            localStorage.setItem(`${article.id}`, JSON.stringify(article));
+        });
+        return "All articles stored to local storage";
+    }
+
     function retrieve_articles_from_session() {
         let sessionStorageKeys = Object.keys(sessionStorage);
         sessionStorageKeys = sessionStorageKeys.filter(entry => entry !== 'jwt');
+        sessionStorageKeys = sessionStorageKeys.filter(entry => entry !== 'level');
         let numericStorageKeys = new Int16Array(sessionStorageKeys.length);
         console.log('sessionStorageKeys post-filter: ', sessionStorageKeys);
         for (let [index, key] of sessionStorageKeys.entries()) {
@@ -426,7 +432,40 @@ document.addEventListener('DOMContentLoaded', () => {
         return articles;
     }
 
+    function retrieve_articles_from_local() {
+        let localStorageKeys = Object.keys(localStorage);
+        localStorageKeys = localStorageKeys.filter(entry => entry !== 'jwt');
+        localStorageKeys = localStorageKeys.filter(entry => entry !== 'level');
+        let numericStorageKeys = new Int16Array(localStorageKeys.length);
+        console.log('localStorageKeys post-filter: ', localStorageKeys);
+        for (let [index, key] of localStorageKeys.entries()) {
+            if (index < localStorageKeys.length) {
+                numericStorageKeys.fill(parseInt(key), index, index+1);
+            } else {
+                numericStorageKeys.fill(parseInt(key), index);
+            }
+            // numericStorageKeys.set(parseInt(key), index);
+            // console.log(index, key, parseInt(key));
+            // console.log('numericStorageKeys[<index>]: ', numericStorageKeys[index]);
+        }
+        // localStorageKeys.forEach(entry, index => {
+        //     numericStorageKeys.set(parseInt(entry), index);
+        // });
+        numericStorageKeys = numericStorageKeys.sort();
+        // console.log('numericStorageKeys post-sort: ', numericStorageKeys);
+        let articles = new Array();
+        numericStorageKeys.forEach(key => {
+            articles.push(JSON.parse(localStorage.getItem(key.toString())));
+        })
+        console.log('articles: ', articles);
+        return articles;
+    }
+    
+
     function redisplay_articles() {
+        article_list_tbl.innerHTML = "";
+        configure_article_table();
+        display_articles(retrieve_articles_from_session());
         tableSection.removeAttribute('hidden');
         article_list_tbl.removeAttribute('hidden');
     }
@@ -505,6 +544,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function display_login() {
         // console.log('display_login was invoked');
+        navContainer.setAttribute('hidden', true);
         loginForm.removeAttribute('hidden');
         formSection.removeAttribute('hidden');
     };
@@ -523,6 +563,164 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function add_user() {
+
+    }
+
+    function add_article() {
+
+    }
+
+    function fetch_all_articles() {
+        const storedToken = sessionStorage.getItem("jwt");
+        fetch('http://localhost:3000/articles', {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${storedToken}`,
+        }
+        }).then(response => response.json())
+        .then(response => {
+            console.log(response.length);
+            // clear the user articles before displaying all articles
+            store_all_articles_to_local(response);
+        })
+    }
+
+    function articles_to_csv() {
+        if (Object.keys(localStorage).length > 0) {
+            null;
+        } else {
+            fetch_all_articles();
+        }
+        let all_articles = retrieve_articles_from_local();
+        console.log('all_articles: ', all_articles);
+        let csv_row = [];
+        csv_row.push('Article ID');
+        csv_row.push('Article Title');
+        csv_row.push('Context Rating');
+        csv_row.push('Content Rating');
+        csv_row.push('Genre Rating');
+        csv_row.push('Sources Rating');
+        csv_row.push('Control Rating');
+        csv_row.push('\r\n');
+        all_articles.map(article => {
+            csv_row.push(`${article.id}`);
+            csv_row.push(article.title);
+            csv_row.push(`${article.context_rating}`);
+            csv_row.push(`${article.content_rating}`);
+            csv_row.push(`${article.genre_rating}`);
+            csv_row.push(`${article.sources_rating}`);
+            csv_row.push(`${article.control_rating}`);
+            csv_row.push('\r\n');
+        })
+        console.log(csv_row);
+        return csv_row;
+    }
+
+    function download_csv(content, filename, contentType) {
+        // Create a blob
+        var blob = new Blob([content], { type: contentType });
+        var url = URL.createObjectURL(blob);
+
+        // Create a link to download it
+        var downloadCSVA = document.createElement('a');
+        downloadCSVA.href = url;
+        downloadCSVA.setAttribute('download', filename);
+        downloadCSVA.click();
+    }
+
+    function view_all_articles() {
+        const storedToken = sessionStorage.getItem("jwt");
+        const userId = sessionStorage.getItem("user_id");
+        fetch('http://localhost:3000/articles', {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${storedToken}`,
+        }
+        }).then(response => response.json())
+        .then(response => {
+            console.log(response.length);
+            if (Object.keys(localStorage).length == 0) {
+                store_all_articles_to_local(response);
+            }
+            // clear the user articles before displaying all articles
+            article_list_tbl.innerHTML = "";
+            configure_article_table();
+            display_articles(response);
+            // store_user_articles_to_session(response['include']);
+        })
+    }
+
+    const addUserLi = document.createElement('li');
+    const addUserA = document.createElement('a');
+    const addArticleLi = document.createElement('li');
+    const addArticleA = document.createElement('a');
+    const viewAllArticlesLi = document.createElement('li');
+    const viewAllArticlesA = document.createElement('a');
+    const downloadCSVLi = document.createElement('li');
+    const downloadCSVA = document.createElement('a');
+
+    function display_nav_container() {
+        navContainer.removeAttribute('hidden');
+        console.log('user level: ', sessionStorage.getItem('level'));
+        
+        addUserA.setAttribute('id', 'add-user');
+        addUserA.setAttribute('href', '#');
+        addUserA.textContent = 'Add User';
+        addUserLi.appendChild(addUserA);
+        navUl.appendChild(addUserLi);
+        addUserA.addEventListener('click', e => {
+            e.preventDefault();
+            console.log('Add User was clicked');
+            add_user();
+        })
+        
+        addArticleA.setAttribute('id', 'add-article');
+        addArticleA.setAttribute('href', '#');
+        addArticleA.textContent = 'Add Article';
+        addArticleLi.appendChild(addArticleA);
+        navUl.appendChild(addArticleLi);
+        addArticleA.addEventListener('click', e => {
+            e.preventDefault();
+            console.log('Add Article was clicked');
+            add_article();
+        })
+
+        viewAllArticlesA.setAttribute('id', 'view-all-articles');
+        viewAllArticlesA.setAttribute('href', '#');
+        viewAllArticlesA.textContent = 'View All Articles';
+        viewAllArticlesLi.appendChild(viewAllArticlesA);
+        navUl.appendChild(viewAllArticlesLi);
+        viewAllArticlesA.addEventListener('click', e => {
+            e.preventDefault();
+            console.log('View All Articles was clicked');
+            view_all_articles();
+        })
+
+        downloadCSVA.setAttribute('id', 'download-csv');
+        downloadCSVA.setAttribute('href', '#');
+        downloadCSVA.textContent = 'Download CSV';
+        downloadCSVLi.appendChild(downloadCSVA);
+        navUl.appendChild(downloadCSVLi);
+        downloadCSVA.addEventListener('click', e => {
+            e.preventDefault();
+            console.log('Download CSV was clicked');
+            let csv = articles_to_csv()
+            download_csv(csv, 'article-export.csv', 'text/csv;charset=utf-8;');
+        })
+
+        if(sessionStorage.getItem('level') > 10) {
+            console.log('User is an admin');
+        } else {
+            addUserLi.setAttribute('hidden', true);
+            addArticleLi.setAttribute('hidden', true);
+            viewAllArticlesLi.setAttribute('hidden', true);
+            downloadCSVLi.setAttribute('hidden', true);
+        }
+    }
+    
     function login_user() {
         // const username = document.getElementById('username');
         const formData = new FormData(loginForm);
@@ -542,9 +740,11 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => {
             const token = response.token;
             sessionStorage.setItem("jwt", token);
+            sessionStorage.setItem("level", response.level);
         })
         .then(response => {
             hide_login_form();
+            display_nav_container();
             get_user_profile();
         })
     }
