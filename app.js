@@ -259,13 +259,27 @@ document.addEventListener('DOMContentLoaded', () => {
         rating_title.innerHTML = `EAC Written Communication Rubric for ${active_article.title}`;
         // rating_title.setAttribute('class', '')
         newRatingForm.appendChild(rating_title);
+        const rubric_header_row = document.createElement('tr');
+        rubric_header_row.setAttribute('class', 'rubric-tr');
+        rubric_header_row.setAttribute('id', 'rubric-header-row');
+        
+        const rubric_row_keys = ['heading', 'description', '4', '3', '2', '1'];
+        // for(let i = 4; i>0; i--) {
+        rubric_row_keys.forEach(row_key => {
+            const rubric_header_row_td = document.createElement('td');
+            rubric_header_row_td.setAttribute('name', 'rubric-header-row-td');
+            rubric_header_row_td.setAttribute('class', 'rubric-header-row-td');
+            rubric_header_row_td.innerHTML = row_key.toUpperCase();
+            rubric_header_row.appendChild(rubric_header_row_td);
+        })
+        newRatingForm.appendChild(rubric_header_row);
         for(let i = 4; i<9; i++) {
             const rubric_row = document.createElement('tr');
             rubric_row.setAttribute('class', 'rubric-tr');
             rubric_row.setAttribute('id', `rubric-tr-${rubric_keys[i]}`);
 
             // const rubric_row_keys = Object.keys(rubric[rubric_keys[i]]);
-            const rubric_row_keys = ['heading', 'description', '4', '3', '2', '1'];
+            // const rubric_row_keys = ['heading', 'description', '4', '3', '2', '1'];
             rubric_row_keys.forEach(row_key => {
                 // console.log(row_key);
                 const rubric_row_td = document.createElement('td');
@@ -567,8 +581,10 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch_all_users();
     }
 
-    function add_article() {
-
+    function handle_add_article() {
+        hide_articles();
+        hide_rating_form();
+        formSection.removeAttribute('hidden');
     }
 
     function fetch_all_articles() {
@@ -662,6 +678,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 store_all_articles_to_local(response);
             }
             // clear the user articles before displaying all articles
+            hide_rating_form();
             article_list_tbl.innerHTML = "";
             configure_article_table();
             display_articles(response);
@@ -701,7 +718,7 @@ document.addEventListener('DOMContentLoaded', () => {
         addArticleA.addEventListener('click', e => {
             e.preventDefault();
             console.log('Add Article was clicked');
-            add_article();
+            handle_add_article();
         })
 
         viewAllArticlesA.setAttribute('id', 'view-all-articles');

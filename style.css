@@ -145,6 +145,19 @@ footer {
     width: 100%;
 }
 
+.rubric-header-row-td {
+    text-align: center;
+    font-weight: bold;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.rubric-row-td {
+    padding-bottom: 10px;
+    padding-right: 10px;
+    max-width: 250px;
+}
+
 /* Responsive Styles */
 @media screen and (max-width: 768px) {
     .container {
