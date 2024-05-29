@@ -5,6 +5,18 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("%cDOM Content Loaded and Parsed!", 'color: magenta');
     sessionStorage.clear();
 
+    DESTINATION_URL = "";
+    const production = true;
+
+    if (production) {
+        DESTINATION_URL = "https://eac-ratings-api-deaf5d3dd970.herokuapp.com/";
+    } else {
+        DESTINATION_URL = "http://localhost:3000/"
+    }
+
+    // const DEPLOYED_URL = "https://eac-ratings-api-deaf5d3dd970.herokuapp.com/";
+    // const DEVELOPMENT_URL = "http://localhost:3000/";
+
     const forms_list = {
         'new-user': {
             'username': 'text',
@@ -216,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function get_user_profile() {
         const storedToken = sessionStorage.getItem("jwt");
-        fetch('http://localhost:3000/profile', {
+        fetch(`${DESTINATION_URL}profile`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -256,7 +268,12 @@ document.addEventListener('DOMContentLoaded', () => {
         formSection.removeAttribute('hidden');
         newRatingForm.removeAttribute('hidden');
         const rating_title = document.createElement('header');
-        rating_title.innerHTML = `EAC Written Communication Rubric for ${active_article.title}`;
+        console.log('active_article.title', active_article.title);
+        if (active_article.title) {
+            rating_title.innerHTML = `EAC Written Communication Rubric for ${active_article.title}`;
+        } else if (parseInt(sessionStorage.getItem('level')) > 10) {
+            rating_title.innerHTML = `EAC Written Communication Rubric for ${localStorage.getItem(article_id)}`;
+        }
         // rating_title.setAttribute('class', '')
         newRatingForm.appendChild(rating_title);
         const rubric_header_row = document.createElement('tr');
@@ -331,7 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const conventionsRating = formData.get('Conventions-rating');
         const sourcesRating = formData.get('Sources-rating');
         const controlRating = formData.get('Control-rating');
-        fetch(`http://localhost:3000/articles/${article_id}`, {
+        fetch(`${DESTINATION_URL}articles/${article_id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
@@ -589,7 +606,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function fetch_all_articles() {
         const storedToken = sessionStorage.getItem("jwt");
-        fetch('http://localhost:3000/articles', {
+        fetch(`${DESTINATION_URL}articles`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -605,7 +622,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function fetch_all_users() {
         const storedToken = sessionStorage.getItem("jwt");
-        fetch('http://localhost:3000/permissible', {
+        fetch(`${DESTINATION_URL}permissible`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -665,7 +682,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function view_all_articles() {
         const storedToken = sessionStorage.getItem("jwt");
         const userId = sessionStorage.getItem("user_id");
-        fetch('http://localhost:3000/articles', {
+        fetch(`${DESTINATION_URL}articles`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -759,7 +776,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const formData = new FormData(loginForm);
         const username = formData.get('username');
         const password = formData.get('password');
-        fetch("http://localhost:3000/login", {
+        // console.log('login form data - username: ', username, ' password: ', password);
+        fetch(`${DESTINATION_URL}login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -771,6 +789,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }),
         }).then(response => response.json())
         .then(response => {
+            console.log(response);
             const token = response.token;
             sessionStorage.setItem("jwt", token);
             sessionStorage.setItem("level", response.level);
