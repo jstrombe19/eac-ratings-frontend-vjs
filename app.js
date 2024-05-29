@@ -377,9 +377,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function is_article_review_complete(article) {
         if(article['content_rating'] && article['context_rating'] && article['control_rating'] && article['sources_rating']) {
-            return true;
+            return 'Complete';
+            // return true;
         } else {
-            return false;
+            return 'Incomplete';
+            // return false;
         }
     }
 
