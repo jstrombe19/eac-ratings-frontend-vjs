@@ -720,7 +720,7 @@ document.addEventListener('DOMContentLoaded', () => {
         addUserA.setAttribute('href', '#');
         addUserA.textContent = 'Add User';
         addUserLi.appendChild(addUserA);
-        navUl.appendChild(addUserLi);
+        // navUl.appendChild(addUserLi);
         addUserA.addEventListener('click', e => {
             e.preventDefault();
             console.log('Add User was clicked');
@@ -731,7 +731,7 @@ document.addEventListener('DOMContentLoaded', () => {
         addArticleA.setAttribute('href', '#');
         addArticleA.textContent = 'Add Article';
         addArticleLi.appendChild(addArticleA);
-        navUl.appendChild(addArticleLi);
+        // navUl.appendChild(addArticleLi);
         addArticleA.addEventListener('click', e => {
             e.preventDefault();
             console.log('Add Article was clicked');
@@ -742,7 +742,7 @@ document.addEventListener('DOMContentLoaded', () => {
         viewAllArticlesA.setAttribute('href', '#');
         viewAllArticlesA.textContent = 'View All Articles';
         viewAllArticlesLi.appendChild(viewAllArticlesA);
-        navUl.appendChild(viewAllArticlesLi);
+        // navUl.appendChild(viewAllArticlesLi);
         viewAllArticlesA.addEventListener('click', e => {
             e.preventDefault();
             console.log('View All Articles was clicked');
@@ -753,7 +753,7 @@ document.addEventListener('DOMContentLoaded', () => {
         downloadCSVA.setAttribute('href', '#');
         downloadCSVA.textContent = 'Download CSV';
         downloadCSVLi.appendChild(downloadCSVA);
-        navUl.appendChild(downloadCSVLi);
+        // navUl.appendChild(downloadCSVLi);
         downloadCSVA.addEventListener('click', e => {
             e.preventDefault();
             console.log('Download CSV was clicked');
@@ -763,14 +763,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if(sessionStorage.getItem('level') > 10) {
             console.log('User is an admin');
-        } else {
-            // addUserLi.setAttribute('hidden', true);
-            // addArticleLi.setAttribute('hidden', true);
-            viewAllArticlesLi.setAttribute('hidden', true);
-            downloadCSVLi.setAttribute('hidden', true);
-        }
-        addUserLi.setAttribute('hidden', true);
-        addArticleLi.setAttribute('hidden', true);
+            navUl.appendChild(addUserLi);
+            navUl.appendChild(addArticleLi);
+            navUl.appendChild(viewAllArticlesLi);
+            navUl.appendChild(downloadCSVLi);
+        } 
     }
     
     function login_user() {
