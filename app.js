@@ -798,14 +798,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }).then(response => response.json())
         .then(response => {
             console.log(response);
-            const token = response.token;
-            sessionStorage.setItem("jwt", token);
-            sessionStorage.setItem("level", response.level);
+            if (response.token) {
+                const token = response.token;
+                sessionStorage.setItem("jwt", token);
+                sessionStorage.setItem("level", response.level);
+            }
         })
         .then(response => {
-            hide_login_form();
-            display_nav_container();
-            get_user_profile();
+            const sessionJWT = sessionStorage.getItem("jwt");
+            if (sessionJWT) {
+                hide_login_form();
+                display_nav_container();
+                get_user_profile();
+            } else {
+                location.reload();
+            }
         })
     }
 
