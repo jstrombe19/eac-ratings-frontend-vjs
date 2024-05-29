@@ -762,11 +762,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if(sessionStorage.getItem('level') > 10) {
             console.log('User is an admin');
         } else {
-            addUserLi.setAttribute('hidden', true);
-            addArticleLi.setAttribute('hidden', true);
+            // addUserLi.setAttribute('hidden', true);
+            // addArticleLi.setAttribute('hidden', true);
             viewAllArticlesLi.setAttribute('hidden', true);
             downloadCSVLi.setAttribute('hidden', true);
         }
+        addUserLi.setAttribute('hidden', true);
+        addArticleLi.setAttribute('hidden', true);
     }
     
     function login_user() {
