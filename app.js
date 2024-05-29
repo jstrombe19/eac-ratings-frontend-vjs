@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     sessionStorage.clear();
 
     let DESTINATION_URL = "https://eac-ratings-api-deaf5d3dd970.herokuapp.com/";
-    const production = false;
+    const production = true;
 
     if (!production) {
         DESTINATION_URL = "http://localhost:3000/";
