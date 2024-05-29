@@ -5,13 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("%cDOM Content Loaded and Parsed!", 'color: magenta');
     sessionStorage.clear();
 
-    DESTINATION_URL = "";
+    let DESTINATION_URL = "https://eac-ratings-api-deaf5d3dd970.herokuapp.com/";
     const production = true;
 
-    if (production) {
-        DESTINATION_URL = "https://eac-ratings-api-deaf5d3dd970.herokuapp.com/";
-    } else {
-        DESTINATION_URL = "http://localhost:3000/"
+    if (!production) {
+        DESTINATION_URL = "http://localhost:3000/";
     }
 
     // const DEPLOYED_URL = "https://eac-ratings-api-deaf5d3dd970.herokuapp.com/";
