@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     sessionStorage.clear();
 
     let DESTINATION_URL = "https://eac-ratings-api-deaf5d3dd970.herokuapp.com/";
-    const production = true;
+    const production = false;
 
     if (!production) {
         DESTINATION_URL = "http://localhost:3000/";
@@ -363,11 +363,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }).then(response => response.json())
         .then(response => {
             console.log(response);
+            update_article(response);
             hide_rating_form();
             redisplay_articles();
         })
     }
 
+    function update_article(article) {
+        const sessionArticle = sessionStorage.getItem(article.id);
+        if (!production) {
+            console.log('sessionArticle: ', sessionArticle);
+        }
+        sessionStorage.removeItem(article.id);
+        sessionStorage.setItem(`${article.id}`, JSON.stringify(article));
+    }
 
     function hide_rating_form() {
         newRatingForm.innerHTML = "";
